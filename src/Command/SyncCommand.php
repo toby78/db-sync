@@ -129,9 +129,9 @@ class SyncCommand extends Command
             $remotePassword = $password;
         }
 
-        $source = $this->createConnection($this->input->getArgument('source'), $user, $password, $charset);
+        $source = $this->createConnection($this->input->getArgument('source'),$this->input->getArgument('sourcePort'),  $user, $password, $charset);
 
-        $target = $this->createConnection($this->input->getArgument('target'), $remoteUser, $remotePassword, $charset);
+        $target = $this->createConnection($this->input->getArgument('target'),$this->input->getArgument('targetPort'), $remoteUser, $remotePassword, $charset);
 
         list($sourceDatabase, $sourceTable) = $this->parseTableName($this->input->getArgument('table'));
 
@@ -185,10 +185,11 @@ class SyncCommand extends Command
         return explode('.', $name, 2);
     }
 
-    private function createConnection($host, $user, $password, $charset)
+    private function createConnection($host, $port, $user, $password, $charset)
     {
         return (new ConnectionFactory())->make([
             'host'      => $host,
+            'port'      => $port,
             'username'  => $user,
             'password'  => $password,
             'charset'   => $charset,
